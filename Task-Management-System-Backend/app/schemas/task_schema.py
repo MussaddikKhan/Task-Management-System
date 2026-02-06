@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field 
 from datetime import datetime
 from typing import Optional
 from app.models.enums.TaskStatus import TaskStatus
@@ -8,7 +8,7 @@ class TaskCreate(BaseModel):
     title: str
     description: Optional[str] = None
     assigned_to_id: int     # 🔥 employee id
-    due_date: Optional[datetime] = None
+    due_date: Optional[datetime] = Field(..., description="Due date for the task")
     status: TaskStatus = TaskStatus.PENDING
 
 

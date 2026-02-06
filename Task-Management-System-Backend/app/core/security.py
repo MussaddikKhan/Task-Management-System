@@ -12,9 +12,9 @@ def truncate_password(password: str) -> str:
         return password_bytes[:72].decode('utf-8', errors='ignore')
     return password
 
-def create_access_token(subject: Union[str, Any]) -> str:
+def create_access_token(subject: Union[str, Any], role: str) -> str:
     expire = datetime.utcnow() + timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
-    to_encode = {"exp": expire, "sub": str(subject)}
+    to_encode = {"exp": expire, "sub": str(subject), "role": role}
     encoded_jwt = jwt.encode(to_encode, settings.SECRET_KEY, algorithm=settings.ALGORITHM)
     return encoded_jwt
 

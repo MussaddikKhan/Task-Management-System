@@ -3,6 +3,7 @@ from fastapi import HTTPException, status
 from app.dao.user_dao import UserDAO , user_dao
 from app.schemas.user_schema import UserCreate, UserResponse
 
+
 # Setup Password Hashing
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
@@ -46,6 +47,10 @@ class UserService:
         if not user:
             raise HTTPException(status_code=404, detail="User not found")
         return UserResponse.model_validate(user)
+    
+    async def get_all_users(self) -> list[UserResponse]:
+        users = await self.user_dao.get_all()
+        return [UserResponse.model_validate(user) for user in users]
 
 # Instantiate Service
 user_service = UserService(user_dao)

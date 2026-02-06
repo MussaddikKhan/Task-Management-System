@@ -18,7 +18,7 @@ class AuthService:
         if not user or not verify_password(user_in.password, user.password_hash):
             raise HTTPException(status_code=401, detail="Incorrect email or password")
             
-        access_token = create_access_token(subject=user.id)
+        access_token = create_access_token(subject=user.id, role = user.role)
         return Token(access_token=access_token)
 
 auth_service = AuthService()

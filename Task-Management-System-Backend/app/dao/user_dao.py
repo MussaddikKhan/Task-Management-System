@@ -1,8 +1,9 @@
-from typing import Optional
+from typing import Optional , List
 from datetime import datetime
 from app.database.database import db
 from app.models.user_model import User
-from app.database.queries import CREATE_USER_SQL, GET_USER_BY_EMAIL_SQL, GET_USER_BY_ID_SQL
+from app.database.queries import CREATE_USER_SQL, GET_USER_BY_EMAIL_SQL, GET_USER_BY_ID_SQL, GET_ALL_USERS_SQL
+
 
 class UserDAO:
     async def create(self, email: str, password_hash: str, role: str) -> User:
@@ -19,5 +20,10 @@ class UserDAO:
         row = await db.fetch_one(GET_USER_BY_ID_SQL, user_id)
         if row: return User(**dict(row))
         return None
+    
+    async def get_all(self) -> List[User]:
+        rows = await db.fetch_all(GET_ALL_USERS_SQL)
+        return [User(**dict(row)) for row in rows]
+
 
 user_dao = UserDAO()
