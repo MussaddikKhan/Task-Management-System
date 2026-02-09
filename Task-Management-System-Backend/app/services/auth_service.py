@@ -2,7 +2,7 @@ from fastapi import HTTPException, status
 from app.dao.user_dao import user_dao
 from app.schemas.user_schema import UserCreate, UserLogin, UserResponse
 from app.core.security import get_password_hash, verify_password, create_access_token
-from app.schemas.token_schema import Token
+from app.schemas.token_schema import TokenWithUser
 
 class AuthService:
     async def register(self, user_in: UserCreate) -> UserResponse:
@@ -13,12 +13,13 @@ class AuthService:
         new_user = await user_dao.create(user_in.email, hashed_pwd, user_in.role)
         return UserResponse.model_validate(new_user)
 
-    async def login(self, user_in: UserLogin) -> Token:
+    async def login(self, user_in: UserLogin) -> TokenWithUser:
         user = await user_dao.get_by_email(user_in.email)
         if not user or not verify_password(user_in.password, user.password_hash):
             raise HTTPException(status_code=401, detail="Incorrect email or password")
             
-        access_token = create_access_token(subject=user.id, role = user.role)
-        return Token(access_token=access_token)
+        access_token = create_access_token(subject=user.id, role=user.role)
+        user_response = UserResponse.model_validate(user)
+        return TokenWithUser(access_token=access_token, user=user_response)
 
 auth_service = AuthService()

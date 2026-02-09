@@ -63,6 +63,15 @@ async def update_task(
     return updated_task
 
 
+# ADMIN ONLY → DELETE TASK
+@router.delete("/{task_id}", status_code=status.HTTP_204_NO_CONTENT)
+async def delete_task(
+    task_id: int,
+    current_user: User = Depends(require_admin),
+):
+    await task_service.delete_task(task_id)
+
+
 # EMPLOYEE → UPDATE STATUS
 @router.patch("/{task_id}/status", response_model=TaskResponse)
 async def update_status(

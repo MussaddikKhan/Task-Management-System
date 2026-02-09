@@ -46,7 +46,7 @@ async def require_admin(
     current_user: User = Depends(get_current_user)
 ) -> User:
 
-    if current_user.role not in ["ADMIN", "MANAGER"]:
+    if current_user.role.upper() not in ["ADMIN", "MANAGER"]:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Admin access required"
@@ -60,7 +60,7 @@ async def require_employee(
     current_user: User = Depends(get_current_user)
 ) -> User:
 
-    if current_user.role != "EMPLOYEE":
+    if current_user.role.upper() != "EMPLOYEE":
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Employee access required"

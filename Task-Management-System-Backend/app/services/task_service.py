@@ -20,7 +20,7 @@ class TaskService:
         if not user:
             raise NotFoundError("Assigned employee does not exist")
 
-        if user.role != "EMPLOYEE":
+        if user.role.upper() != "EMPLOYEE":
             raise NotFoundError("Task can only be assigned to employees")
 
         return await self.dao.create(task_in)
@@ -52,7 +52,7 @@ class TaskService:
             if not assigned_user:
                 raise NotFoundError("Assigned employee does not exist")
 
-            if assigned_user.role != "EMPLOYEE":
+            if assigned_user.role.upper() != "EMPLOYEE":
                 raise NotFoundError("Task can only be assigned to employees")
 
         updated_task = await self.dao.update(task_id, task_update)

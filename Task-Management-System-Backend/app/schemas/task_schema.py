@@ -7,8 +7,8 @@ from app.models.enums.TaskStatus import TaskStatus
 class TaskCreate(BaseModel):
     title: str
     description: Optional[str] = None
-    assigned_to_id: int     # 🔥 employee id
-    due_date: Optional[datetime] = Field(..., description="Due date for the task")
+    assigned_to_id: int  # employee id
+    due_date: Optional[datetime] = None
     status: TaskStatus = TaskStatus.PENDING
 
 

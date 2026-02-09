@@ -8,7 +8,8 @@ from app.database.queries import (
     GET_ALL_TASKS_SQL,
     GET_TASK_BY_ID_SQL,
     UPDATE_TASK_SQL,
-    GET_TASKS_BY_USER_SQL
+    GET_TASKS_BY_USER_SQL,
+    DELETE_TASK_SQL,
 )
 
 class TaskDAO:
@@ -66,5 +67,8 @@ class TaskDAO:
     async def get_task_by_user_id(self, user_id: int) -> List[TaskResponse]:
         rows = await db.fetch_all(GET_TASKS_BY_USER_SQL, user_id)
         return [TaskResponse(**dict(r)) for r in rows]
+
+    async def delete(self, task_id: int) -> None:
+        await db.execute(DELETE_TASK_SQL, task_id)
 
 task_dao = TaskDAO()
